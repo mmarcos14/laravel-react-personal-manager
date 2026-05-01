@@ -39,7 +39,6 @@ Live demo: https://ambroiseapp.com/
 
 ## Screenshots
 
-(Add your screenshots here)
 
 ---
 
