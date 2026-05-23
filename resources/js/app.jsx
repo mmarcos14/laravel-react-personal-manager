@@ -21,6 +21,8 @@ import { Contact } from "./Pages/Contact";
 import { ContactList } from "./Pages/ContactList";
 import { Profile } from "./Pages/Profile";
 import { Ambroise } from "./Pages/Ambroise";
+import { ViewInvestment } from "./Pages/ViewInvestment";
+import { ViewSaving } from "./Pages/ViewSaving";
 
 
 function App() {
@@ -56,6 +58,16 @@ function App() {
                     <Route element={<RoutesProtected />}>
                         <Route path="/spent" element={<ListSpent />} />
                     </Route>
+
+
+                      <Route element={<RoutesProtected />}>
+                        <Route path="/investment_tracking" element={<ViewInvestment/>} />
+                    </Route>
+
+                      <Route element={<RoutesProtected />}>
+                        <Route path="/saving_tracking" element={<ViewSaving/>} />
+                    </Route>
+
 
                     
                     <Route element={<RoutesProtected />}>

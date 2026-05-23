@@ -124,7 +124,12 @@ public function store(Request $request)
 
     // 2. Commencer la requête
     $query = Spent::query();
-
+    
+    if(Auth::check()){
+     $query->where('user_id',Auth::user()->id);
+    }else{
+        return response()->json(['message'=>'no user  connectes'],404);
+    }
     // 3. Filtrer par plage de dates
     if ($date1 && $date2) {
         $query->whereBetween('operation_date', [$date1, $date2]);

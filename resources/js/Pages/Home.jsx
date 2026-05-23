@@ -5,190 +5,371 @@ import { fetchAll } from "../Services/apiService";
 
 export const Home = () => {
   const { user } = useAuth();
-  const [spent, setSpent] = useState([]);
 
+  const [spent, setSpent] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // fetch financial data
   useEffect(() => {
     const getSpents = async () => {
       try {
         const res = await fetchAll("spent");
+
         setSpent(res.data.spentss || []);
       } catch (e) {
         console.error(e);
+      } finally {
+        setLoading(false);
       }
     };
+
     getSpents();
   }, []);
 
+  // safe array
   const safeData = Array.isArray(spent) ? spent : [];
 
+  // total income
   const totalDeposits = safeData
-    .filter((i) => i.type === "Income")
-    .reduce((t, i) => t + Number(i.amount), 0);
+    .filter((item) => item.type === "Income")
+    .reduce((total, item) => total + Number(item.amount), 0);
 
+  // total expenses
   const totalWithdraw = safeData
-    .filter((i) => i.type === "Spent")
-    .reduce((t, i) => t + Number(i.amount), 0);
+    .filter((item) => item.type === "Spent")
+    .reduce((total, item) => total + Number(item.amount), 0);
 
+  // total investments
   const totalInvestment = safeData
-    .filter((i) => i.type === "Investment")
-    .reduce((t, i) => t + Number(i.amount), 0);
+    .filter((item) => item.type === "Investment")
+    .reduce((total, item) => total + Number(item.amount), 0);
 
-  const balance = totalDeposits - totalWithdraw - totalInvestment;
+  // current balance
+  const balance =
+    totalDeposits - totalWithdraw;
 
   return (
     <div className="min-vh-100 bg-light">
+
+      {/* HERO SECTION */}
       <section className="container py-5">
+
         <div className="row align-items-center g-5">
+
           <div className="col-lg-7">
-            <span className="badge bg-dark mb-3 px-3 py-2">
-              Full-Stack Developer • Laravel • React
+
+            <span className="badge bg-dark px-3 py-2 mb-3">
+              Full-Stack Developer • Laravel • React.js
             </span>
 
-            <h1 className="display-5 fw-bold">
-              I build secure, scalable, and recruiter-ready web applications.
+            <h1 className="display-4 fw-bold lh-sm">
+              Building modern and scalable web applications
+              with Laravel and React.
             </h1>
 
-            <p className="lead text-muted mt-3">
-              This project demonstrates authentication, API integration, data
-              aggregation, and real-time dashboard updates using Laravel and React.
+            <p className="lead text-muted mt-4">
+              This project demonstrates authentication,
+              reusable services, REST API integration,
+              financial tracking, and responsive frontend
+              architecture using modern technologies.
             </p>
 
-            <div className="d-flex gap-3 flex-wrap mt-4">
-              <Link to="/dashboad" className="btn btn-primary px-4">
-                View Live Demo
+            <div className="d-flex flex-wrap gap-3 mt-4">
+
+              <Link
+                to="/dashboad"
+                className="btn btn-primary btn-lg px-4 shadow-sm"
+              >
+                View Dashboard
               </Link>
-              <Link to="/filter" className="btn btn-outline-dark px-4">
+
+              <Link
+                to="/filter"
+                className="btn btn-outline-dark btn-lg px-4"
+              >
                 Explore Features
               </Link>
+
               <a
                 href="https://github.com/mmarcos14"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-dark px-4"
+                className="btn btn-dark btn-lg px-4"
               >
                 GitHub
               </a>
+
             </div>
+
           </div>
 
+          {/* RIGHT SIDE CARD */}
           <div className="col-lg-5">
-            <div className="card shadow-sm rounded-4 p-4">
-              <h5 className="fw-bold mb-3">Project Snapshot</h5>
-              <ul className="list-unstyled mb-0 text-muted">
-                <li className="mb-2">• Secure login with Laravel Sanctum</li>
-                <li className="mb-2">• REST API with reusable service layer</li>
-                <li className="mb-2">• Dynamic financial calculations</li>
-                <li className="mb-2">• Responsive UI built with React</li>
-                <li className="mb-2">• Clean architecture and maintainable code</li>
+
+            <div className="card border-0 shadow-lg rounded-4 p-4">
+
+              <h4 className="fw-bold mb-4">
+                Project Features
+              </h4>
+
+              <ul className="list-unstyled text-muted mb-0">
+
+                <li className="mb-3">
+                  Secure authentication with Laravel Sanctum
+                </li>
+
+                <li className="mb-3">
+                  REST API architecture
+                </li>
+
+                <li className="mb-3">
+                  Reusable React components
+                </li>
+
+                <li className="mb-3">
+                  Financial dashboard calculations
+                </li>
+
+                <li className="mb-3">
+                  Service layer and clean backend structure
+                </li>
+
+                <li>
+                  Responsive UI with Bootstrap
+                </li>
+
               </ul>
+
             </div>
+
           </div>
+
         </div>
+
       </section>
 
+      {/* STATS SECTION */}
       <section className="container pb-5">
-        <h3 className="text-center fw-bold mb-4">Live Data</h3>
+
         <div className="row g-4 text-center">
+
           <div className="col-md-3">
-            <div className="card p-4 shadow-sm rounded-4">
-              <h6 className="text-muted">Notes</h6>
-              <h3 className="text-primary">{user?.notes?.length || 0}</h3>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h6 className="text-muted">
+                Notes
+              </h6>
+
+              <h2 className="fw-bold text-primary">
+                {user?.notes?.length || 0}
+              </h2>
+
             </div>
+
           </div>
 
           <div className="col-md-3">
-            <div className="card p-4 shadow-sm rounded-4">
-              <h6 className="text-muted">Income</h6>
-              <h3 className="text-success">+{totalDeposits.toFixed(2)}</h3>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h6 className="text-muted">
+                Income
+              </h6>
+
+              <h2 className="fw-bold text-success">
+                ${totalDeposits.toFixed(2)}
+              </h2>
+
             </div>
+
           </div>
 
           <div className="col-md-3">
-            <div className="card p-4 shadow-sm rounded-4">
-              <h6 className="text-muted">Expenses</h6>
-              <h3 className="text-danger">-{totalWithdraw.toFixed(2)}</h3>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h6 className="text-muted">
+                Expenses
+              </h6>
+
+              <h2 className="fw-bold text-danger">
+                ${totalWithdraw.toFixed(2)}
+              </h2>
+
             </div>
+
           </div>
 
           <div className="col-md-3">
-            <div className="card p-4 shadow-sm rounded-4">
-              <h6 className="text-muted">Investment</h6>
-              <h3 className="text-warning">{totalInvestment.toFixed(2)}</h3>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h6 className="text-muted">
+                Investments
+              </h6>
+
+              <h2 className="fw-bold text-warning">
+                ${totalInvestment.toFixed(2)}
+              </h2>
+
             </div>
+
           </div>
 
+          {/* balance */}
           <div className="col-12">
-            <div className="card p-4 shadow-sm rounded-4 mt-3">
-              <h6 className="text-muted">Balance</h6>
-              <h3 className="fw-bold">{balance.toFixed(2)}</h3>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4">
+
+              <h5 className="text-muted">
+                Current Balance
+              </h5>
+
+              <h1 className="fw-bold">
+                ${balance.toFixed(2)}
+              </h1>
+
             </div>
+
           </div>
+
         </div>
+
       </section>
 
+      {/* SKILLS SECTION */}
       <section className="container pb-5">
-        <h3 className="text-center fw-bold mb-4">What This Project Shows</h3>
+
+        <h2 className="text-center fw-bold mb-5">
+          What This Project Demonstrates
+        </h2>
+
         <div className="row g-4">
+
           <div className="col-md-4">
-            <div className="card p-4 shadow-sm rounded-4 h-100">
-              <h5>Authentication</h5>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h5 className="fw-bold mb-3">
+                Authentication
+              </h5>
+
               <p className="text-muted mb-0">
-                Secure user access with Laravel Sanctum and protected routes.
+                Secure authentication system using
+                Laravel Sanctum and protected routes.
               </p>
+
             </div>
+
           </div>
 
           <div className="col-md-4">
-            <div className="card p-4 shadow-sm rounded-4 h-100">
-              <h5>Data Processing</h5>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h5 className="fw-bold mb-3">
+                Backend Architecture
+              </h5>
+
               <p className="text-muted mb-0">
-                Aggregation, filtering, and balance calculation in real time.
+                Clean code structure with services,
+                reusable logic, and Eloquent relationships.
               </p>
+
             </div>
+
           </div>
 
           <div className="col-md-4">
-            <div className="card p-4 shadow-sm rounded-4 h-100">
-              <h5>API Integration</h5>
+
+            <div className="card border-0 shadow-sm rounded-4 p-4 h-100">
+
+              <h5 className="fw-bold mb-3">
+                Frontend Development
+              </h5>
+
               <p className="text-muted mb-0">
-                Reusable service layer with clean frontend-backend communication.
+                Dynamic React components with responsive UI
+                and modern user experience.
               </p>
+
             </div>
+
           </div>
+
         </div>
+
       </section>
 
+      {/* ABOUT SECTION */}
       <section className="container pb-5">
-        <div className="card p-4 p-md-5 shadow-sm rounded-4 text-center">
-          <h3 className="fw-bold mb-3">About Me</h3>
-          <p className="text-muted mx-auto mb-0" style={{ maxWidth: "700px" }}>
-            I am a full-stack developer focused on building modern web applications
-            with Laravel and React. I care about clean UI, strong architecture, and
-            solving real problems with maintainable code.
+
+        <div className="card border-0 shadow-lg rounded-4 p-5 text-center">
+
+          <h2 className="fw-bold mb-4">
+            About Me
+          </h2>
+
+          <p
+            className="text-muted mx-auto mb-0"
+            style={{ maxWidth: "800px" }}
+          >
+            I am a Full-Stack Web Developer specialized
+            in Laravel and React.js. I enjoy building
+            scalable web applications with clean architecture,
+            reusable code, REST APIs, and responsive user
+            interfaces. I continuously improve my skills
+            by working on real-world projects.
           </p>
+
         </div>
+
       </section>
 
+      {/* CONTACT SECTION */}
       <section className="container pb-5 text-center">
-        <h4 className="fw-bold">Contact</h4>
-        <p className="text-muted">
-          Open to internship, freelance, and full-time opportunities.
+
+        <h2 className="fw-bold mb-3">
+          Contact
+        </h2>
+
+        <p className="text-muted mb-4">
+          Open to internship, freelance,
+          and junior developer opportunities.
         </p>
 
-        <div className="d-flex justify-content-center gap-3 flex-wrap">
-          <a href="mailto:your@email.com" className="btn btn-primary">
+        <div className="d-flex justify-content-center flex-wrap gap-3">
+
+          <a
+            href="mailto:your@email.com"
+            className="btn btn-primary px-4"
+          >
             Email Me
           </a>
+
           <a
             href="https://www.linkedin.com/in/ambroise-zounmenou-87843b30b/"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-outline-dark"
+            className="btn btn-outline-dark px-4"
           >
             LinkedIn
           </a>
+
+          <a
+            href="https://github.com/mmarcos14"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-dark px-4"
+          >
+            GitHub
+          </a>
+
         </div>
+
       </section>
+
     </div>
   );
 };

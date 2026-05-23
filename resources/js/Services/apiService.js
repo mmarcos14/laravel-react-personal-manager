@@ -28,8 +28,7 @@ export const getCsrfCookie = async () => {
 };
 
 // Récupérer toutes les données d’un endpoint
-export const fetchAll = (endpoint) =>
-  api.get(`/${endpoint}/index`);
+export const fetchAll = (endpoint) =>api.get(`/${endpoint}/index`);
 
 // Créer une nouvelle donnée
 export const createOne = async (endpoint, data) => {

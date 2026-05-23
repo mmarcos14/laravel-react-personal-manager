@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Button, Form, Spinner } from "react-bootstrap";
 import { Filters } from "../Services/apiService";
+import { useAuth } from "../ServiceContext/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export const FilterTransaction = () => {
   const [datafilter, setData] = useState({
@@ -8,6 +10,8 @@ export const FilterTransaction = () => {
     date2: "",
     type: "",
   });
+
+  const {user}=useAuth();
 
   const [transactionData, setTransaction] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,6 +69,11 @@ export const FilterTransaction = () => {
     if (!date) return "-";
     return new Date(date).toLocaleDateString("fr-FR");
   };
+
+
+  if(!user){
+    return <Navigate to={'/login'} replace/>
+  }
 
   return (
     <div className="container py-5">
