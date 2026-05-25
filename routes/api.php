@@ -33,7 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     */
     Route::get('/user', [AuthController::class, 'getUser']);
     Route::get('/user/index', [UserController::class, 'index']);
-    Route::post('/user/update', [UserController::class, 'update']);
+    Route::post('/Roles/update', [UserController::class, 'update']);
 
     /*
     |-------------------------

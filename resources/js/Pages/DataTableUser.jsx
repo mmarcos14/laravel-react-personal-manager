@@ -1,35 +1,27 @@
 import { useState } from "react";
 import { UpdateModalUser } from "./UpdateModalUser";
 
-// 📌 Composant qui affiche la liste des utilisateurs
 export const DataTableUser = ({ DataUser = [], refreshlist }) => {
-
-  //  Sécurise les données pour éviter les erreurs si ce n’est pas un tableau
   const safeData = Array.isArray(DataUser) ? DataUser : [];
 
-  //  Gestion du modal d’édition
   const [showupdateModal, setShowUpdateModal] = useState(false);
-
-  //  Utilisateur sélectionné pour modification
   const [selectedUser, setSelectedUser] = useState(null);
 
-  //  Fonction pour transformer le status en rôle lisible
   const getRole = (status) => {
     switch (status) {
       case 1:
-        return { label: "User", className: "badge bg-primary" };
+        return { label: "User", className: "badge rounded-pill bg-primary px-3 py-2" };
       case 2:
-        return { label: "Manager", className: "badge bg-info text-dark" };
+        return { label: "Manager", className: "badge rounded-pill bg-info text-dark px-3 py-2" };
       case 3:
-        return { label: "Admin", className: "badge bg-success" };
+        return { label: "Admin", className: "badge rounded-pill bg-success px-3 py-2" };
       case 0:
-        return { label: "Disabled", className: "badge bg-danger" };
+        return { label: "Disabled", className: "badge rounded-pill bg-danger px-3 py-2" };
       default:
-        return { label: "Unknown", className: "badge bg-secondary" };
+        return { label: "Unknown", className: "badge rounded-pill bg-secondary px-3 py-2" };
     }
   };
 
-  //  Ouvrir le modal avec les infos de l’utilisateur sélectionné
   const openEditModal = (user) => {
     setSelectedUser(user);
     setShowUpdateModal(true);
@@ -39,114 +31,126 @@ export const DataTableUser = ({ DataUser = [], refreshlist }) => {
     <div
       className="min-vh-100 py-5"
       style={{
-        background:
-          "linear-gradient(135deg, #f8fbff 0%, #eef2ff 50%, #ffffff 100%)",
+        background: "linear-gradient(135deg, #f8fbff 0%, #eef2ff 50%, #ffffff 100%)",
       }}
     >
       <div className="container">
+        <div className="mb-4 d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+          <div>
+            <h3 className="fw-bold text-dark mb-1">User Management</h3>
+            <p className="text-muted mb-0">
+              Manage your application users easily
+            </p>
+          </div>
 
-        {/* 📌 HEADER */}
-        <div className="mb-4">
-          <h3 className="fw-bold text-dark">User Management</h3>
-          <p className="text-muted mb-0">
-            Manage your application users easily
-          </p>
+          <div className="d-flex gap-2 flex-wrap">
+            <span className="badge bg-primary-subtle text-primary border px-3 py-2">
+              Total users: {safeData.length}
+            </span>
+          </div>
         </div>
 
-        {/* 📌 TABLE CARD */}
-        <div className="card border-0 shadow-lg rounded-4">
-          <div className="card-body p-4">
+        <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
+          <div
+            className="card-header border-0 text-white px-4 py-3"
+            style={{
+              background: "linear-gradient(135deg, #0f172a 0%, #2563eb 100%)",
+            }}
+          >
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h5 className="mb-1 fw-bold">Users Table</h5>
+                <small className="text-white-50">
+                  View and manage user accounts
+                </small>
+              </div>
+            </div>
+          </div>
 
-            {/* 📌 TABLE */}
+          <div className="card-body p-0">
             <div className="table-responsive">
-              <table className="table table-hover align-middle">
-
-                {/* TABLE HEADER */}
+              <table className="table table-hover align-middle mb-0">
                 <thead className="table-light">
                   <tr>
-                    <th>#</th>
+                    <th className="ps-4">#</th>
                     <th>User</th>
                     <th>Email</th>
                     <th>Status</th>
-                    <th className="text-end">Action</th>
+                    <th className="text-end pe-4">Action</th>
                   </tr>
                 </thead>
 
-                {/* TABLE BODY */}
                 <tbody>
                   {safeData.length > 0 ? (
                     safeData.map((item, index) => {
-
-                      // 🔹 récupération du rôle de l'utilisateur
                       const role = getRole(item.status);
 
                       return (
                         <tr key={item.id}>
-                          <td className="fw-semibold">{index + 1}</td>
-
-                          {/* Nom utilisateur */}
-                          <td>
-                            <div className="fw-bold">{item.name}</div>
+                          <td className="ps-4 fw-semibold text-muted">
+                            {String(index + 1).padStart(2, "0")}
                           </td>
 
-                          {/* Email */}
-                          <td className="text-muted">{item.email}</td>
-
-                          {/* Status */}
                           <td>
-                            <span className={role.className}>
-                              {role.label}
-                            </span>
+                            <div className="d-flex align-items-center gap-3">
+                              <div
+                                className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm"
+                                style={{ width: 42, height: 42 }}
+                              >
+                                {item.name?.charAt(0)?.toUpperCase()}
+                              </div>
+                              <div>
+                                <div className="fw-bold">{item.name}</div>
+                                <small className="text-muted d-md-none">{item.email}</small>
+                              </div>
+                            </div>
                           </td>
 
-                          {/* Actions */}
-                          <td className="text-end">
+                          <td className="text-muted d-none d-md-table-cell">{item.email}</td>
 
+                          <td>
+                            <span className={role.className}>{role.label}</span>
+                          </td>
+
+                          <td className="text-end pe-4">
                             <div className="dropdown">
-
                               <button
-                                className="btn btn-sm btn-outline-secondary dropdown-toggle"
+                                className="btn btn-sm btn-outline-secondary dropdown-toggle px-3"
                                 data-bs-toggle="dropdown"
+                                aria-expanded="false"
                               >
                                 Actions
                               </button>
 
-                              <ul className="dropdown-menu dropdown-menu-end">
-
+                              <ul className="dropdown-menu dropdown-menu-end shadow-sm">
                                 <li>
                                   <button
-                                    className="dropdown-item"
+                                    className="dropdown-item py-2"
                                     onClick={() => openEditModal(item)}
                                   >
                                     ✏️ Edit user
                                   </button>
                                 </li>
-
                               </ul>
-
                             </div>
-
                           </td>
                         </tr>
                       );
                     })
                   ) : (
-                    // 🔹 Si aucun utilisateur
                     <tr>
-                      <td colSpan="5" className="text-center py-4 text-muted">
+                      <td colSpan="5" className="text-center py-5 text-muted">
+                        <div className="display-6 mb-2">👥</div>
                         No users found
                       </td>
                     </tr>
                   )}
                 </tbody>
-
               </table>
             </div>
-
           </div>
         </div>
 
-        {/* 📌 MODAL EDIT USER */}
         {showupdateModal && (
           <UpdateModalUser
             CurrentUser={selectedUser}
@@ -155,7 +159,6 @@ export const DataTableUser = ({ DataUser = [], refreshlist }) => {
             refreshlist={refreshlist}
           />
         )}
-
       </div>
     </div>
   );

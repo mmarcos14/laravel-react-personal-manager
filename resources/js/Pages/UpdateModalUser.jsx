@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import {
+  Modal,
+  Button,
+  Form,
+  ModalHeader,
+  ModalBody,
+} from "react-bootstrap";
+
 import { useAuth } from "../ServiceContext/AuthContext";
+import { updateOne } from "../Services/apiService";
 
 export const UpdateModalUser = ({
   show,
@@ -9,128 +17,108 @@ export const UpdateModalUser = ({
   refreshlist,
 }) => {
 
-  // état du formulaire utilisateur
+  // USER DATA
   const [DataUser, setData] = useState({
     id: "",
     email: "",
     password: "",
     password_confirmation: "",
+    role: "",
   });
 
-  // erreurs backend
+  useEffect(()=>{
+    setData({...DataUser,id:CurrentUser?.id})
+    
+  },[CurrentUser])
+
+  // BACKEND ERRORS
   const [errors, setErrors] = useState({});
 
   const { operations } = useAuth();
 
-  // synchronisation du user sélectionné avec le formulaire
-  useEffect(() => {
-    if (CurrentUser) {
-      setData({
-        id: CurrentUser.id || "",
-        email: CurrentUser.email || "",
-        password: "",
-        password_confirmation: "",
-      });
-    }
-  }, [CurrentUser]);
+  // ROLE OPTIONS
+  const roles = {
+    1: "User",
+    2: "Level 2",
+    3: "Admin",
+    4: "Super Admin",
+    5: "Manager",
+    6: "Moderator",
+  };
 
-  // gestion input
+  const RightOption = [1, 2, 3, 4, 5, 6];
+
+  // HANDLE INPUT
   const handleInput = (e) => {
-    setData({
-      ...DataUser,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    setData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  // submit update
-  const save = async (e) => {
+  const update=async(e)=>{
     e.preventDefault();
-    setErrors({});
-
-    try {
-      await operations("/user/reset", {
-        ...DataUser,
-        id: CurrentUser.id,
-      });
-
-      refreshlist?.();
-      HideModal?.();
-
-    } catch (error) {
-      setErrors(error?.response?.data?.errors || {});
-    }
-  };
+    const response=updateOne('Roles',DataUser);
+    window.location.reload();
+  }
 
   return (
     <Modal show={show} onHide={HideModal} centered>
 
-      <Modal.Header closeButton>
-        <Modal.Title>Update User</Modal.Title>
-      </Modal.Header>
+      {/* HEADER */}
+      <ModalHeader className="bg-dark text-white">
+        <h5 className="mb-0">Update User Role</h5>
 
-      <Modal.Body>
+        <button
+          className="btn-close btn-close-white"
+          onClick={HideModal}
+        />
+      </ModalHeader>
 
-        <Form onSubmit={save}>
+      {/* BODY */}
+      <ModalBody>
 
-          {/* EMAIL */}
+        <Form onSubmit={update}>
+
+          {/* SELECT ROLE */}
           <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
 
-            <Form.Control
-              type="email"
-              name="email"
-              value={DataUser.email}
+            <Form.Label className="fw-semibold">
+              Select Role
+            </Form.Label>
+
+            <Form.Select
+              name="role"
+              value={DataUser.role}
               onChange={handleInput}
-            />
+            >
 
-            <small className="text-danger">
-              {errors?.email?.[0]}
-            </small>
+              <option value="">
+                Choose role
+              </option>
+
+              {RightOption.map((p) => (
+                <option value={p} key={p}>
+                  {roles[p]}
+                </option>
+              ))}
+
+            </Form.Select>
+
           </Form.Group>
 
-          {/* PASSWORD */}
-          <Form.Group className="mb-3">
-            <Form.Label>New Password</Form.Label>
-
-            <Form.Control
-              type="password"
-              name="password"
-              value={DataUser.password}
-              onChange={handleInput}
-            />
-
-            <small className="text-danger">
-              {errors?.password?.[0]}
-            </small>
-          </Form.Group>
-
-          {/* CONFIRM PASSWORD */}
-          <Form.Group className="mb-3">
-            <Form.Label>Confirm Password</Form.Label>
-
-            <Form.Control
-              type="password"
-              name="password_confirmation"
-              value={DataUser.password_confirmation}
-              onChange={handleInput}
-            />
-          </Form.Group>
-
-          {/* ACTIONS */}
-          <div className="d-flex justify-content-end gap-2">
-            <Button variant="secondary" onClick={HideModal}>
-              Cancel
-            </Button>
-
-            <Button type="submit" variant="primary">
-              Save
+          {/* BUTTON */}
+          <div className="d-flex justify-content-end">
+            <Button variant="primary" type="submit">
+              Save Changes
             </Button>
           </div>
 
         </Form>
 
-      </Modal.Body>
-
+      </ModalBody>
     </Modal>
   );
 };
