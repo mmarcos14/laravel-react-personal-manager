@@ -23,6 +23,8 @@ import { Profile } from "./Pages/Profile";
 import { Ambroise } from "./Pages/Ambroise";
 import { ViewInvestment } from "./Pages/ViewInvestment";
 import { ViewSaving } from "./Pages/ViewSaving";
+import { SupportView } from "./Pages/SuportView";
+
 
 
 function App() {
@@ -66,6 +68,11 @@ function App() {
 
                       <Route element={<RoutesProtected />}>
                         <Route path="/saving_tracking" element={<ViewSaving/>} />
+                    </Route>
+
+                    
+                      <Route element={<RoutesProtected />}>
+                        <Route path="/support" element={<SupportView/>} />
                     </Route>
 
 

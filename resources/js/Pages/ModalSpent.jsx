@@ -27,7 +27,7 @@ export const ModalSpent = ({
   });
 
   // Options pour le type de transaction
-  const typeOptions = ["Income", "Spent", "Saving", "Investment", "Transport", "Food"];
+ const typeOptions = ["Income", "Spent", "Saving", "Investment", "Transport", "Food","Familly Support"];
 
   // Options de méthodes de paiement
   const methodOptions = [
@@ -35,6 +35,7 @@ export const ModalSpent = ({
     "CASHAPP",
     "MOBILE TRANSFER",
     "BANK TRANSFER",
+    "Taptap Send"
   ];
 
   // Synchronisation des données quand on édite une transaction

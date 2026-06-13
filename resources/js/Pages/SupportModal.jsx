@@ -9,7 +9,7 @@ import {
 import { createOne, updateOne } from "../Services/apiService";
 import { toast } from "react-toastify";
 
-export const ModalInvestment = ({
+export const SupportModal=({
   showm,
   HideModal,
   CurrentSpent,
@@ -31,8 +31,8 @@ export const ModalInvestment = ({
   const [dataSpent, setDataSpent] = useState(initialState);
   const [submitting, setSubmitting] = useState(false);
 
-  const typeOptions = ["Income", "Spent", "Saving", "Investment", "Transport", "Food"];
-  const methodOptions = ["ZELLE", "CASHAPP", "MOBILE TRANSFER", "BANK TRANSFER"];
+  const typeOptions = ["Income", "Spent", "Saving", "Investment", "Transport", "Food","Familly Support"];
+  const methodOptions = ["ZELLE", "CASHAPP", "MOBILE TRANSFER", "BANK TRANSFER",'Taptap Send'];
 
   //  FIX MOUNT STATE
   useEffect(() => {

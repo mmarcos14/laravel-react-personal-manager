@@ -24,15 +24,18 @@ export const ModalSpent2 = ({
   const [errors, setErrors] = useState({}); // gestion erreurs backend
 
   // options de type de transaction
-  const typeOptions = ["Income", "Spent", "Saving", "Investment", "Transport", "Food"];
+  const typeOptions = ["Income", "Spent", "Saving", "Investment", "Transport", "Food","Familly Support"];
 
   // options de méthode de paiement
+  // Options de méthodes de paiement
   const methodOptions = [
     "ZELLE",
     "CASHAPP",
     "MOBILE TRANSFER",
     "BANK TRANSFER",
+    "Taptap Send"
   ];
+
 
   // synchronisation si on édite une transaction
   useEffect(() => {

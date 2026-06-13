@@ -5,7 +5,7 @@ import { useState } from "react";
 export const Nav = () => {
   const { user, logout } = useAuth();
   const [show, setShow] = useState(false);
-  const isAdmin = user?.status === 3;
+  const isAdmin = [2,3,4,5,6].includes(user?.status);
 
   const closeMenu = () => setShow(false);
 
@@ -15,6 +15,8 @@ export const Nav = () => {
     { to: "/spent", label: "Dépenses", icon: "💸" },
     { to: "/investment_tracking", label: "Investment", icon: "💸" },
     { to: "/saving_tracking", label: "Saving", icon: "💸" },
+    { to: "/support", label: "support", icon: "👤👤" },
+
     { to: "/note", label: "Notes", icon: "📝" },
     { to: "/filter", label: "Filtrer", icon: "🔎" },
     { to: "/profile", label: "Profil", icon: "👤" },

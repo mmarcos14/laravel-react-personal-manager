@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { UpdateModalUser } from "./UpdateModalUser";
+import { useAuth } from "../ServiceContext/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export const DataTableUser = ({ DataUser = [], refreshlist }) => {
   const safeData = Array.isArray(DataUser) ? DataUser : [];
 
   const [showupdateModal, setShowUpdateModal] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const {user}=useAuth();
 
   const getRole = (status) => {
     switch (status) {
@@ -26,6 +29,12 @@ export const DataTableUser = ({ DataUser = [], refreshlist }) => {
     setSelectedUser(user);
     setShowUpdateModal(true);
   };
+
+  if (user && ![2,3,4,5,6].includes(user.status)) {
+  return <Navigate to="/" replace />;
+}
+
+console.log(user.status, typeof user.status);
 
   return (
     <div

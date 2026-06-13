@@ -34,6 +34,8 @@ export const FilterTransaction = () => {
     { value: "Investment", label: "Investment" },
     { value: "Transport", label: "Transport" },
     { value: "Food", label: "Food" },
+      { value: "Familly Support", label: "Familly Support" }
+    
   ];
 
   const total = useMemo(() => {
